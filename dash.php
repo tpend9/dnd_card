@@ -44,12 +44,11 @@ function ability_mod($num, $level) {
         $num = 13;
     } elseif ($num <= 39) {
         $num = 14;
-    } elseif ($num <= 41) {
+    } else {
         $num = 15;
     }
     
-    
-    
+    return floor($level * $num);
 }
 
 
@@ -206,32 +205,32 @@ function ability_mod($num, $level) {
                         <div>
                             <h4>STRENGTH</h4>
                             <p>0</p>
-                            <p class="lower_num"><?php echo $row['strenght'] ?></p>
+                            <p class="lower_num"><?php echo  ability_mod($row['strenght'], $row['level']) ?></p>
                         </div>
                         <div>
                             <h4>DEXTERITY</h4>
-                            <p>2</p>
-                            <p class="lower_num"><?php echo $row['dexterity'] ?></p>
+                            <p><?php echo $row['dexterity'] ?></p>
+                            <p class="lower_num"><?php echo ability_mod($row['dexterity'], $row['level']) ?></p>
                         </div>
                         <div>
                             <h4>CONSTITUTION</h4>
-                            <p>2</p>
-                            <p class="lower_num"><?php echo $row['constitation'] ?></p>
+                            <p><?php echo $row['constitation'] ?></p>
+                            <p class="lower_num"><?php echo ability_mod($row['constitation'], $row['level']) ?></p>
                         </div>
                         <div>
                             <h4>INTELLIGENCE</h4>
-                            <p>3</p>
-                            <p class="lower_num"><?php echo $row['intelligence'] ?></p>
+                            <p><?php echo $row['intelligence'] ?></p>
+                            <p class="lower_num"><?php echo ability_mod($row['intelligence'], $row['level']) ?></p>
                         </div>
                         <div>
                             <h4>WISDOM</h4>
-                            <p>3</p>
-                            <p class="lower_num"><?php echo $row['wisdom'] ?></p>
+                            <p><?php echo $row['wisdom'] ?></p>
+                            <p class="lower_num"><?php echo ability_mod($row['wisdom'], $row['level']) ?></p>
                         </div>
                         <div>
                             <h4>CHARISMA</h4>
-                            <p>3</p>
-                            <p class="lower_num"><?php echo $row['charisma'] ?></p>
+                            <p><?php echo $row['charisma'] ?></p>
+                            <p class="lower_num"><?php echo ability_mod($row['charisma'], $row['level']) ?></p>
                         </div>
             </div>
             
