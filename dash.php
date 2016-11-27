@@ -10,6 +10,50 @@ $conn = mysqli_connect($servername, $username, $password, $dbname);
 if (!$conn) {
     die("Connection failed: " . mysqli_connect_error());
 }
+
+
+function ability_mod($num, $level) {
+    $level = $level/2;
+    if($num <= 11) {
+        $num = 0;
+    } elseif( $num <= 13) {
+        $num = 1;
+    } elseif ($num <= 15) {
+        $num = 2;
+    } elseif ($num <= 17) {
+        $num = 3;
+    } elseif ($num <= 19) {
+        $num = 4;
+    } elseif ($num <= 21) {
+        $num = 5;
+    } elseif ($num <=23) {
+        $num = 6;
+    } elseif ($num <= 25) {
+        $num = 7;
+    } elseif ($num <= 27) {
+        $num = 8;
+    } elseif ($num <= 29) {
+        $num = 9;
+    } elseif ($num <= 31) {
+        $num = 10;
+    } elseif ($num <= 33) {
+        $num = 11;
+    } elseif ($num <= 35) {
+        $num = 12;
+    } elseif ($num <= 37) {
+        $num = 13;
+    } elseif ($num <= 39) {
+        $num = 14;
+    } elseif ($num <= 41) {
+        $num = 15;
+    }
+    
+    
+    
+}
+
+
+
 ?>
 
 
@@ -162,32 +206,32 @@ if (!$conn) {
                         <div>
                             <h4>STRENGTH</h4>
                             <p>0</p>
-                            <p class="lower_num">19</p>
+                            <p class="lower_num"><?php echo $row['strenght'] ?></p>
                         </div>
                         <div>
                             <h4>DEXTERITY</h4>
                             <p>2</p>
-                            <p class="lower_num">30</p>
+                            <p class="lower_num"><?php echo $row['dexterity'] ?></p>
                         </div>
                         <div>
                             <h4>CONSTITUTION</h4>
                             <p>2</p>
-                            <p class="lower_num">29</p>
+                            <p class="lower_num"><?php echo $row['constitation'] ?></p>
                         </div>
                         <div>
                             <h4>INTELLIGENCE</h4>
                             <p>3</p>
-                            <p class="lower_num">10</p>
+                            <p class="lower_num"><?php echo $row['intelligence'] ?></p>
                         </div>
                         <div>
                             <h4>WISDOM</h4>
                             <p>3</p>
-                            <p class="lower_num">20</p>
+                            <p class="lower_num"><?php echo $row['wisdom'] ?></p>
                         </div>
                         <div>
                             <h4>CHARISMA</h4>
                             <p>3</p>
-                            <p class="lower_num">30</p>
+                            <p class="lower_num"><?php echo $row['charisma'] ?></p>
                         </div>
             </div>
             
