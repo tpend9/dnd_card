@@ -1,0 +1,106 @@
+* {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+td {
+    border: 2px solid black;
+}
+.main {
+    width: 50%;
+}
+/**************************
+ *
+ *      header
+ *
+ *************************/
+.top table {
+    width: 100%;
+    
+}
+.top td {
+    width: 16%;
+}
+
+
+/**************************
+ *
+ *      all cards
+ *
+ *************************/
+.life, .abill, .attacks, .skills {
+    width: 90%;
+    border: 1px solid black;
+    margin: 10px 0;
+}
+.life div, .abill div, .attacks div, .skills div {
+    width: 40%;
+    display: inline-block;
+    border: 2px solid black;
+    margin: 5px;
+    padding: 5px;
+}
+
+
+/**************************
+ *
+ *      life
+ *
+ *************************/
+.name {
+    width: 100%;
+    border: 2px solid black;
+    text-align: left;
+    padding: 5px;
+}
+.life p {
+    padding: 10px;
+}
+
+
+
+/**************************
+ *
+ *      attacks
+ *
+ *************************/
+.attacks table {
+    width: 100%;
+}
+.attacks td {
+    padding: 5px;
+}
+
+
+/**************************
+ *
+ *      abill
+ *
+ *************************/
+.abill p {
+    padding: 10px 0;
+}
+.abill .lower_num {
+    padding: 0;
+    border: 1px solid black;
+    width: 20%;
+    margin-left: 40%;
+}
+
+
+/**************************
+ *
+ *      skills
+ *
+ *************************/
+
+.skills li {
+    list-style: none;
+    text-align: left;
+    padding: 2px;
+    margin-left: 20px;
+}
+.skills h4 {
+    padding: 5px;
+}
