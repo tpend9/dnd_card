@@ -54,21 +54,25 @@ function ability_mod($num, $level) {
 function other_tables($table, $id) {
     global $conn;
     if ($table == 'attack') {
+        $info = array('ATK Bonus', 'Damage', 'atk_bonus', 'damage');
+    } elseif ($table == 'equipment') {
+        $info = array('Info', 'Quantity', 'info', 'quantity');
+    }
         $results = "
             <table>
                     <tr>
                         <td>
-                            <h4>NAME</h4>
+                            <h4>Name</h4>
                         </td>
                         <td>
-                            <h4>ATK BONUS</h4>
+                            <h4>$info[0]</h4>
                         </td>
                         <td>
-                            <h4>DAMAGE</h4>
+                            <h4>$info[1]</h4>
                         </td>
                     </tr>";
                         
-                        $sql = "SELECT * FROM attack WHERE user_id = $id";
+                        $sql = "SELECT * FROM $table WHERE user_id = $id";
                         $result = mysqli_query($conn, $sql);
     
     
@@ -76,31 +80,23 @@ function other_tables($table, $id) {
                         while($row = mysqli_fetch_assoc($result)) {
                                 
                     $results .= "
-                    <tr>
-                        <td>
-                            <p> ";
-                    $results .= $row['name'];
-                    $results .= "</p>
-                        </td>
-                        <td>
-                            <p>";
-                    $results .= $row['atk_bonus'];
-                    $results .= "</p>
-                        </td>
-                        <td>
-                            <p>";
-                    $results .= $row['damage'];
-                    $results .= "</p>
-                        </td>
-                    </tr>
-                
-        ";
-        
+                        <tr>
+                            <td>
+                                <p>" . $row['name'] . "</p>
+                            </td>
+                            <td>
+                                <p>" . $row[$info[2]] . "</p>
+                            </td>
+                            <td>
+                                <p>" . $row[$info[3]] . "</p>
+                            </td>
+                        </tr>
+                    ";
                      }
                      $results .= "</table>";
                 return $results;
                         
-    }
+
 }
 
 ?>
@@ -202,30 +198,11 @@ function other_tables($table, $id) {
             
             <div class="attacks">
                 <h4>EQUIPMENT</h4>
-                <table>
-                    <tr>
-                        <td>
-                            <h4>NAME</h4>
-                        </td>
-                        <td>
-                            <h4>INFORMATION</h4>
-                        </td>
-                        <td>
-                            <h4>QUANTITY</h4>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <p>longbow</p>
-                        </td>
-                        <td>
-                            <p>+9</p>
-                        </td>
-                        <td>
-                            <p>3D3</p>
-                        </td>
-                    </tr>
-                </table>
+                <?php
+                
+                echo other_tables('equipment', $row['id']);
+                
+                ?>
             </div>
 
             </td>
