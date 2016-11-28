@@ -104,3 +104,58 @@ td {
 .skills h4 {
     padding: 5px;
 }
+
+/**************************
+ *
+ *      overlay input
+ *
+ *************************/
+#edit_table {
+    position: fixed;
+    top: 30px;
+    width: 80%;
+    left: 10%;
+    padding: 20px 0;
+    background: grey;
+    z-index: 10;
+    display: none;
+}
+#edit_table input, #edit_table textarea {
+    font-size: 15px;
+}
+#edit_table textarea {
+    width: 200px;
+    height: 150px;
+    padding: 5px;
+}
+#edit_table button {
+    padding: 8px;
+    margin: 5px;
+}
+.exit_lightbox {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    padding 3px;
+    border: 1px solid black;
+}
+#edit_table td {
+    width: 10%;
+}
+#edit_table table {
+    width: 80%;
+    margin-left: 4%;
+}
+#edit_table input {
+    padding: 5px;
+}
+#lightbox {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(66, 64, 64, 0.7);
+    cursor: pointer;
+    display: none;
+}
+

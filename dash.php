@@ -70,6 +70,9 @@ function other_tables($table, $id) {
                         <td>
                             <h4>$info[1]</h4>
                         </td>
+                        <td>
+                            <h4>Edit</h4>
+                        </td>
                     </tr>";
                         
                         $sql = "SELECT * FROM $table WHERE user_id = $id";
@@ -78,7 +81,7 @@ function other_tables($table, $id) {
     
 
                         while($row = mysqli_fetch_assoc($result)) {
-                                
+                    $show = "'$table', '$id', '" . $row['id'] ."', '" . $row['name'] . "', '" . $row[$info[2]] . "', '" . $row[$info[3]] . "', 'name', '" . $info[0] . "', '" . $info[1] . "'";          
                     $results .= "
                         <tr>
                             <td>
@@ -89,6 +92,9 @@ function other_tables($table, $id) {
                             </td>
                             <td>
                                 <p>" . $row[$info[3]] . "</p>
+                            </td>
+                            <td>
+                                <p onclick=\"show_edit($show);\">Edit</p>
                             </td>
                         </tr>
                     ";
@@ -109,6 +115,7 @@ function other_tables($table, $id) {
 <head>
     <title>Name | dashborad</title>
     <link rel="stylesheet" type="text/css" href="main.css" />
+    <script src="main.js"></script>
     <style>
         * {
             padding: 0;
@@ -118,6 +125,45 @@ function other_tables($table, $id) {
 </head>
 
 <body>
+    <div onclick="lightbox_vis('hide');" id='lightbox' class='lightbox'></div>
+    <div id="edit_table">
+        <h4 class="exit_lightbox" onclick='lightbox_vis("hide");'>X</h4>
+        <h4>Edit Info</h4>
+        <form action="" method="post">
+        <table>
+            <tr>
+                <td>
+                    <h4 id="head_1">Name</h4>
+                </td>
+                <td>
+                    <h4 id="head_2">Info</h4>
+                </td>
+                <td>
+                    <h4 id="head_3">Quantiy</h4>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type='text' id="info_1" name="info_1" />
+                </td>
+                <td>
+                    <textarea id="info_2" name="info_2"></textarea>
+                </td>
+                <td>
+                    <input type="number" id="info_3" name="info_3" />
+                </td>
+            </tr>
+        </table>
+        <button type="button" class="edit_func_button" id="edit" onclick="edit_func('edit');">Edit</button>
+        <button type="button" class="edit_func_button" id="delete" onclick="edit_func('delete');">Delete</button>
+        <input type="text" name="func" id="func" hidden='true' />
+        <input type='text' name='table' id="table" hidden='true' />
+        <input type='number' name="user_id" id="user_id" hidden='true' />
+        <input type="number" name="id" id="id" hidden='true' />
+        <br />
+        <button type="submit" value="Submit">Submit</button>
+        </form>
+    </div>
     <?php
     
     $sql = "SELECT * FROM user WHERE id = 1";
