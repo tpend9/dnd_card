@@ -204,33 +204,33 @@ function ability_mod($num, $level) {
             <div class="abill">
                         <div>
                             <h4>STRENGTH</h4>
-                            <p>0</p>
-                            <p class="lower_num"><?php echo  ability_mod($row['strenght'], $row['level']) ?></p>
+                            <p><?php echo $row['strenght'] ?></p>
+                            <p class="lower_num">+<?php echo  ability_mod($row['strenght'], $row['level']) ?></p>
                         </div>
                         <div>
                             <h4>DEXTERITY</h4>
                             <p><?php echo $row['dexterity'] ?></p>
-                            <p class="lower_num"><?php echo ability_mod($row['dexterity'], $row['level']) ?></p>
+                            <p class="lower_num">+<?php echo ability_mod($row['dexterity'], $row['level']) ?></p>
                         </div>
                         <div>
                             <h4>CONSTITUTION</h4>
                             <p><?php echo $row['constitation'] ?></p>
-                            <p class="lower_num"><?php echo ability_mod($row['constitation'], $row['level']) ?></p>
+                            <p class="lower_num">+<?php echo ability_mod($row['constitation'], $row['level']) ?></p>
                         </div>
                         <div>
                             <h4>INTELLIGENCE</h4>
                             <p><?php echo $row['intelligence'] ?></p>
-                            <p class="lower_num"><?php echo ability_mod($row['intelligence'], $row['level']) ?></p>
+                            <p class="lower_num">+<?php echo ability_mod($row['intelligence'], $row['level']) ?></p>
                         </div>
                         <div>
                             <h4>WISDOM</h4>
                             <p><?php echo $row['wisdom'] ?></p>
-                            <p class="lower_num"><?php echo ability_mod($row['wisdom'], $row['level']) ?></p>
+                            <p class="lower_num">+<?php echo ability_mod($row['wisdom'], $row['level']) ?></p>
                         </div>
                         <div>
                             <h4>CHARISMA</h4>
                             <p><?php echo $row['charisma'] ?></p>
-                            <p class="lower_num"><?php echo ability_mod($row['charisma'], $row['level']) ?></p>
+                            <p class="lower_num">+<?php echo ability_mod($row['charisma'], $row['level']) ?></p>
                         </div>
             </div>
             
@@ -239,24 +239,24 @@ function ability_mod($num, $level) {
             <div class="skills">
                 <h4>SKILLS</h4>
                 <ul>
-                    <li> +2  Acrobatics (Dex)</li>
-                    <li> +3  Animal Handling (Wis)</li>
-                    <li> +2  Arcana (Int)</li>
-                    <li> +2  Athletics (Str)</li>
-                    <li> +4  Deception (Cha)</li>
-                    <li> +1  History (Int)</li>
-                    <li> +2  Insight (Wis)</li>
-                    <li> +4  Intimidation (Cha)</li>
-                    <li> +2  Investigation (Int)</li>
-                    <li> +5  Medicine (Wis)</li>
-                    <li> +3  Nature (Int)</li>
-                    <li> +6  Perception (Wis)</li>
-                    <li> +5  Performance (Cha)</li>
-                    <li> +3  Persuasion (Cha)</li>
-                    <li> +1  Religion (Int)</li>
-                    <li> +2  Sleight of Hand (Dex)</li>
-                    <li> +2  Stealth (Dex)</li>
-                    <li> +6  Survival (Wis)</li>
+                    <li> +<?php echo ability_mod($row['dexterity'], $row['level']) ?>  Acrobatics (Dex)</li>
+                    <li> +<?php echo ability_mod($row['wisdom'], $row['level']) ?>  Animal Handling (Wis)</li>
+                    <li> +<?php echo ability_mod($row['intelligence'], $row['level']) ?>  Arcana (Int)</li>
+                    <li> +<?php echo  ability_mod($row['strenght'], $row['level']) ?>  Athletics (Str)</li>
+                    <li> +<?php echo ability_mod($row['charisma'], $row['level']) ?>  Deception (Cha)</li>
+                    <li> +<?php echo ability_mod($row['intelligence'], $row['level']) ?>  History (Int)</li>
+                    <li> +<?php echo ability_mod($row['wisdom'], $row['level']) ?>  Insight (Wis)</li>
+                    <li> +<?php echo ability_mod($row['charisma'], $row['level']) ?>  Intimidation (Cha)</li>
+                    <li> +<?php echo ability_mod($row['intelligence'], $row['level']) ?>  Investigation (Int)</li>
+                    <li> +<?php echo ability_mod($row['wisdom'], $row['level']) ?>  Medicine (Wis)</li>
+                    <li> +<?php echo ability_mod($row['intelligence'], $row['level']) ?>  Nature (Int)</li>
+                    <li> +<?php echo ability_mod($row['wisdom'], $row['level']) ?>  Perception (Wis)</li>
+                    <li> +<?php echo ability_mod($row['charisma'], $row['level']) ?>  Performance (Cha)</li>
+                    <li> +<?php echo ability_mod($row['charisma'], $row['level']) ?>  Persuasion (Cha)</li>
+                    <li> +<?php echo ability_mod($row['intelligence'], $row['level']) ?>  Religion (Int)</li>
+                    <li> +<?php echo ability_mod($row['dexterity'], $row['level']) ?>  Sleight of Hand (Dex)</li>
+                    <li> +<?php echo ability_mod($row['dexterity'], $row['level']) ?>  Stealth (Dex)</li>
+                    <li> +<?php echo ability_mod($row['wisdom'], $row['level']) ?>  Survival (Wis)</li>
                 </ul>
                 
             </div>
