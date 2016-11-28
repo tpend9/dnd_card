@@ -81,7 +81,7 @@ function other_tables($table, $id) {
     
 
                         while($row = mysqli_fetch_assoc($result)) {
-                    $show = "'$table', '$id', '" . $row['id'] ."', '" . $row['name'] . "', '" . $row[$info[2]] . "', '" . $row[$info[3]] . "', 'name', '" . $info[0] . "', '" . $info[1] . "'";          
+                    $show = "'$table', '$id', '" . $row['id'] ."', '" . $row['name'] . "', '" . $row[$info[2]] . "', '" . $row[$info[3]] . "', 'name', '" . $info[0] . "', '" . $info[1] . "', ''";          
                     $results .= "
                         <tr>
                             <td>
@@ -94,16 +94,17 @@ function other_tables($table, $id) {
                                 <p>" . $row[$info[3]] . "</p>
                             </td>
                             <td>
-                                <p onclick=\"show_edit($show);\">Edit</p>
+                                <p onclick=\"show_edit($show, 'edit_table');\">Edit</p>
                             </td>
                         </tr>
                     ";
                      }
-                     $results .= "</table>";
+                     $results .= "</table>
+                        <button type='button' class='new_table' onclick=\"show_edit('$table', '$id', '" . $row['id'] . "', '', '', '', 'name', '" . $info[0] . "', '" . $info[1] . "', 'new');\">Add</button>";
                 return $results;
-                        
+}    
 
-}
+
 
 ?>
 
@@ -125,11 +126,11 @@ function other_tables($table, $id) {
 </head>
 
 <body>
-    <div onclick="lightbox_vis('hide');" id='lightbox' class='lightbox'></div>
-    <div id="edit_table">
-        <h4 class="exit_lightbox" onclick='lightbox_vis("hide");'>X</h4>
-        <h4>Edit Info</h4>
-        <form action="" method="post">
+    <div onclick="lightbox_vis('hide', 'edit_table'); lightbox_vis('hide', 'edit_life');" id='lightbox' class='lightbox'></div>
+    <div class="info_box" id="edit_table">
+        <h4 class="exit_lightbox" onclick='lightbox_vis("hide", "edit_table");'>X</h4>
+        <h4>Edit <span id="title"></span></h4>
+        <form action="other_table_func.php" method="post">
         <table>
             <tr>
                 <td>
@@ -150,7 +151,7 @@ function other_tables($table, $id) {
                     <textarea id="info_2" name="info_2"></textarea>
                 </td>
                 <td>
-                    <input type="number" id="info_3" name="info_3" />
+                    <input type="text" id="info_3" name="info_3" />
                 </td>
             </tr>
         </table>
@@ -162,6 +163,38 @@ function other_tables($table, $id) {
         <input type="number" name="id" id="id" hidden='true' />
         <br />
         <button type="submit" value="Submit">Submit</button>
+        </form>
+    </div>
+    
+    
+    <div class="info_box" id="edit_life">
+        <h4 class="exit_lightbox" onclick='lightbox_vis("hide", "edit_life");'>X</h4>
+        <h4>Edit Life</h4>
+        <form action="life_func.php" method="post">
+            <table>
+                <tr>
+                    <td>
+                        <h4>Hit points</h4>
+                        <input type="number" id="hit_point" name="hit_point" />
+                    </td>
+                    <td>
+                        <h4>Armor</h4>
+                        <input type="number" id="armor" name="armor" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h4>Max Hit Points</h4>
+                        <input type="number" id="max_hit_point" name="max_hit_point" />
+                    </td>
+                    <td>
+                        <h4>Hit Dice</h4>
+                        <input type="text" name="hit_dice" id="hit_dice" />
+                    </td>
+                </tr>
+            </table>
+            <input type="text" id="life_id" name="id" hidden="true" />
+            <button type="submit">Edit</button>
         </form>
     </div>
     <?php
@@ -232,6 +265,8 @@ function other_tables($table, $id) {
                             <h4>HIT DICE</h4>
                             <p><?php echo $row['hit_dice'] ?></p>
                         </div>
+                        <br />
+                        <button type="button" onclick='life_vis(<?php echo '"' . $row['hit_point'] . '", "' . $row['armor'] . '", "' . $row['max_hit_point'] . '", "' . $row['hit_dice'] . '", "' . $row['id'] . '"' ?>);'>Edit</button>
             </div>
             <div class="attacks">
                 <h4>ATTACKS</h4>

@@ -110,7 +110,8 @@ td {
  *      overlay input
  *
  *************************/
-#edit_table {
+
+.info_box {
     position: fixed;
     top: 30px;
     width: 80%;
@@ -120,15 +121,15 @@ td {
     z-index: 10;
     display: none;
 }
-#edit_table input, #edit_table textarea {
+.info_box input, .info_box textarea {
     font-size: 15px;
 }
-#edit_table textarea {
+.info_box textarea {
     width: 200px;
     height: 150px;
     padding: 5px;
 }
-#edit_table button {
+.info_box button {
     padding: 8px;
     margin: 5px;
 }
@@ -140,14 +141,14 @@ td {
     padding 3px;
     border: 1px solid black;
 }
-#edit_table td {
+.info_box td {
     width: 10%;
 }
-#edit_table table {
+.info_box table {
     width: 80%;
     margin-left: 4%;
 }
-#edit_table input {
+.infobox input {
     padding: 5px;
 }
 #lightbox {
