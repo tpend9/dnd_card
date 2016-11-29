@@ -57,3 +57,9 @@ function life_vis(info_1, info_2, info_3, info_4, id) {
     change_info(id, "life_id");
     lightbox_vis('show', 'edit_life');
 }
+
+function edit_input_info(id, element) {
+    var info = document.getElementById(element).value;
+    var url = "edit_input_func.php?id=" + id + "&element=" + element + "&info=" + info;
+    document.location = url;
+}

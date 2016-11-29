@@ -167,36 +167,6 @@ function other_tables($table, $id) {
     </div>
     
     
-    <div class="info_box" id="edit_life">
-        <h4 class="exit_lightbox" onclick='lightbox_vis("hide", "edit_life");'>X</h4>
-        <h4>Edit Life</h4>
-        <form action="life_func.php" method="post">
-            <table>
-                <tr>
-                    <td>
-                        <h4>Hit points</h4>
-                        <input type="number" id="hit_point" name="hit_point" />
-                    </td>
-                    <td>
-                        <h4>Armor</h4>
-                        <input type="number" id="armor" name="armor" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <h4>Max Hit Points</h4>
-                        <input type="number" id="max_hit_point" name="max_hit_point" />
-                    </td>
-                    <td>
-                        <h4>Hit Dice</h4>
-                        <input type="text" name="hit_dice" id="hit_dice" />
-                    </td>
-                </tr>
-            </table>
-            <input type="text" id="life_id" name="id" hidden="true" />
-            <button type="submit">Edit</button>
-        </form>
-    </div>
     <?php
     
     $sql = "SELECT * FROM user WHERE id = 1";
@@ -229,15 +199,15 @@ function other_tables($table, $id) {
                 
                 <td>
                     <h4>Copper piece</h4>
-                    <p><?php echo $row['cp'] ?></p>
+                    <input type="number" id="cp" value="<?php echo $row['cp'] ?>" onblur="edit_input_info(<?php echo "'" . $row['id'] . "', 'cp'" ?>);" />
                 </td>
                 <td>
                     <h4>Silver piece</h4>
-                    <p><?php echo $row['sp'] ?></p>
+                    <input type="number" id="sp" value="<?php echo $row['sp'] ?>" onblur="edit_input_info(<?php echo "'" . $row['id'] . "', 'sp'" ?>);" />
                 </td>
                 <td>
                     <h4>Gold piece</h4>
-                    <p><?php echo $row['gp'] ?></p>
+                    <input type="number" id="gp" value="<?php echo $row['gp'] ?>" onblur="edit_input_info(<?php echo "'" . $row['id'] . "', 'gp'" ?>);" />
                 </td>
             </tr>
         </table>
@@ -251,23 +221,24 @@ function other_tables($table, $id) {
                 <h3>Life</h3>
                         <div>
                             <h4>HIT POINTS</h4>
-                            <p><?php echo $row['hit_point'] ?></p>
+                            <input type="text" id="hit_point" value="<?php echo $row['hit_point'] ?>" onblur="edit_input_info(<?php echo "'" . $row['id'] . "', 'hit_point'" ?>);" />
                         </div>
                         <div>
                             <h4>ARMOR</h4>
-                            <p><?php echo $row['armor'] ?></p>
+                            <input type="text" id="armor" value="<?php echo $row['armor'] ?>" onblur="edit_input_info(<?php echo "'" . $row['id'] . "', 'armor'" ?>);" />
                         </div>
                         <div>
                             <h4>MAX HIT POINTS</h4>
-                            <p><?php echo $row['max_hit_point'] ?></p>
+                            <input type="text" id="max_hit_point" value="<?php echo $row['max_hit_point'] ?>" onblur="edit_input_info(<?php echo "'" . $row['id'] . "', 'max_hit_point'" ?>);" />
                         </div>
                         <div>
                             <h4>HIT DICE</h4>
-                            <p><?php echo $row['hit_dice'] ?></p>
+                            <input type="text" id="hit_dice" value="<?php echo $row['hit_dice'] ?>" onblur="edit_input_info(<?php echo "'" . $row['id'] . "', 'hit_dice'" ?>);" />
                         </div>
                         <br />
-                        <button type="button" onclick='life_vis(<?php echo '"' . $row['hit_point'] . '", "' . $row['armor'] . '", "' . $row['max_hit_point'] . '", "' . $row['hit_dice'] . '", "' . $row['id'] . '"' ?>);'>Edit</button>
             </div>
+            
+            
             <div class="attacks">
                 <h4>ATTACKS</h4>
                 <?php
