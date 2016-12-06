@@ -1,20 +1,23 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "dnd";
+$title = 'dash';
+include("extra/header.php");
+include("character_sheet/1.php");
+?>
+<style>
+    <?php include("dash.css"); ?>
+</style>
+<script>
+    <?php include('main.js'); ?>
+</script>
+<?php
 
-// Create connection
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
 
 
 function ability_mod($num, $level) {
-    $level = $level/2;
-    if($num <= 11) {
+    $level = $level;
+    if ($num <= 8) {
+      $num = -1;  
+    } elseif($num <= 11) {
         $num = 0;
     } elseif( $num <= 13) {
         $num = 1;
@@ -47,284 +50,320 @@ function ability_mod($num, $level) {
     } else {
         $num = 15;
     }
+    $result = $level * $num;
+    if ($result >= 0) {
+        return "+" . $result;
+    } else {
+        return $result;
+    }
     
-    return floor($level * $num);
 }
+
 
 function other_tables($table, $id) {
     global $conn;
-    if ($table == 'attack') {
-        $info = array('ATK Bonus', 'Damage', 'atk_bonus', 'damage');
-    } elseif ($table == 'equipment') {
-        $info = array('Info', 'Quantity', 'info', 'quantity');
+    
+    if ($table == "equipment") {
+        $info = array('Name', 'Quantity');
+    } else {
+        $info = array('Name', 'atk_bonus', 'Damage');
     }
-        $results = "
-            <table>
-                    <tr>
-                        <td>
-                            <h4>Name</h4>
-                        </td>
-                        <td>
-                            <h4>$info[0]</h4>
-                        </td>
-                        <td>
-                            <h4>$info[1]</h4>
-                        </td>
-                        <td>
-                            <h4>Edit</h4>
-                        </td>
-                    </tr>";
-                        
-                        $sql = "SELECT * FROM $table WHERE user_id = $id";
-                        $result = mysqli_query($conn, $sql);
     
     
+    $result = "
+    <table class='table table-hover table-bordered'>
+        <tr>";
+        for ($x = 0; $x < count($info); $x++) {
+            $result .= "<th>" . $info[$x] . "</th>";
+        }
+    $result .= "
+        <th>Edit</th>
+        </tr>";
+    
+    $sql = "SELECT * FROM $table WHERE user_id = $id";
+    $query = mysqli_query($conn, $sql);
+    
+    while ($row = mysqli_fetch_assoc($query)) {
+        $result .= "<tr>";
+                
+                for ($x = 0; $x < count($info); $x++) {
+                    $result .= "<td>" . $row[strtolower($info[$x])] . "</td>";
+                }
+                
+            $result .= "
+                <td onclick='show_edit();' >Edit</td>
+            </tr>";
+    }
+    $result .= "</table>";
 
-                        while($row = mysqli_fetch_assoc($result)) {
-                    $show = "'$table', '$id', '" . $row['id'] ."', '" . $row['name'] . "', '" . $row[$info[2]] . "', '" . $row[$info[3]] . "', 'name', '" . $info[0] . "', '" . $info[1] . "', ''";          
-                    $results .= "
-                        <tr>
-                            <td>
-                                <p>" . $row['name'] . "</p>
-                            </td>
-                            <td>
-                                <p>" . $row[$info[2]] . "</p>
-                            </td>
-                            <td>
-                                <p>" . $row[$info[3]] . "</p>
-                            </td>
-                            <td>
-                                <p onclick=\"show_edit($show, 'edit_table');\">Edit</p>
-                            </td>
-                        </tr>
-                    ";
-                     }
-                     $results .= "</table>
-                        <button type='button' class='new_table' onclick=\"show_edit('$table', '$id', '" . $row['id'] . "', '', '', '', 'name', '" . $info[0] . "', '" . $info[1] . "', 'new');\">Add</button>";
-                return $results;
+    return $result;
 }    
 
 
 
+
+
+
+
+
+
+
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "dnd";
+
+// Create connection
+$conn = mysqli_connect($servername, $username, $password, $dbname);
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+$sql = "SELECT * FROM `user` WHERE id = '" . $_SESSION['id'] ."'";
+$result = mysqli_query($conn, $sql);
+
+    // output data of each row
+    while($row = mysqli_fetch_assoc($result)) {
 ?>
 
-
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title>Name | dashborad</title>
-    <link rel="stylesheet" type="text/css" href="main.css" />
-    <script src="main.js"></script>
-    <style>
-        * {
-            padding: 0;
-            margin: 0;
-        }
-    </style>
-</head>
-
-<body>
-    <div onclick="lightbox_vis('hide', 'edit_table'); lightbox_vis('hide', 'edit_life');" id='lightbox' class='lightbox'></div>
-    <div class="info_box" id="edit_table">
-        <h4 class="exit_lightbox" onclick='lightbox_vis("hide", "edit_table");'>X</h4>
-        <h4>Edit <span id="title"></span></h4>
-        <form action="other_table_func.php" method="post">
-        <table>
-            <tr>
-                <td>
-                    <h4 id="head_1">Name</h4>
-                </td>
-                <td>
-                    <h4 id="head_2">Info</h4>
-                </td>
-                <td>
-                    <h4 id="head_3">Quantiy</h4>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <input type='text' id="info_1" name="info_1" />
-                </td>
-                <td>
-                    <textarea id="info_2" name="info_2"></textarea>
-                </td>
-                <td>
-                    <input type="text" id="info_3" name="info_3" />
-                </td>
-            </tr>
-        </table>
-        <button type="button" class="edit_func_button" id="edit" onclick="edit_func('edit');">Edit</button>
-        <button type="button" class="edit_func_button" id="delete" onclick="edit_func('delete');">Delete</button>
-        <input type="text" name="func" id="func" hidden='true' />
-        <input type='text' name='table' id="table" hidden='true' />
-        <input type='number' name="user_id" id="user_id" hidden='true' />
-        <input type="number" name="id" id="id" hidden='true' />
-        <br />
-        <button type="submit" value="Submit">Submit</button>
-        </form>
+<div class="jumbotron row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-3">
+        <h3><?php echo $row['name'] ?></h3>
     </div>
-    
-    
-    <?php
-    
-    $sql = "SELECT * FROM user WHERE id = 1";
-    $result = mysqli_query($conn, $sql);
-    
-    
-        // output data of each row
-        while($row = mysqli_fetch_assoc($result)) {
-            ?>
- <section class="dash">
-    <div class="top">
-        <table>
-            
-                
-                    <h4 class="name">name <?php echo $row['name'] ?></h4>
-                    
-            <tr>
-                <td>
-                    <h4>CLASS & LEVEL</h4>
-                    <p><?php echo $row['class'] ?></p>
-                </td>
-                <td>
-                    <h4>BACKGROUND</h4>
-                    <p><?php echo $row['background'] ?></p>
-                </td>
-                <td>
-                    <h4>RACE</h4>
-                    <p><?php echo $row['race'] ?></p>
-                </td>
-                
-                <td>
-                    <h4>Copper piece</h4>
-                    <input type="number" id="cp" value="<?php echo $row['cp'] ?>" onblur="edit_input_info(<?php echo "'" . $row['id'] . "', 'cp'" ?>);" />
-                </td>
-                <td>
-                    <h4>Silver piece</h4>
-                    <input type="number" id="sp" value="<?php echo $row['sp'] ?>" onblur="edit_input_info(<?php echo "'" . $row['id'] . "', 'sp'" ?>);" />
-                </td>
-                <td>
-                    <h4>Gold piece</h4>
-                    <input type="number" id="gp" value="<?php echo $row['gp'] ?>" onblur="edit_input_info(<?php echo "'" . $row['id'] . "', 'gp'" ?>);" />
-                </td>
-            </tr>
-        </table>
+    <div class="col-sm-7">
+        
+        <div class="top row">
+            <div class="col-sm-6">
+                <h3><?php echo $sheet[0]['class'] . " " . $sheet[0]['background'] . " " . $sheet[0]['race'] ?></h3>
+                <p>Background</p>
+            </div>
+            <div class="col-sm-3">
+                <h2></h2>
+                <input class="form-control" type="number" id="xp" value="<?php echo $row['xp'] ?>" />
+                <p>XP</p>
+            </div>
+            <div class="col-sm-3">
+                <h2></h2>
+                <input class="form-control" type="number" id="level" value="<?php echo $row['level'] ?>" />
+                <p>Level</p>
+            </div>
+        </div>
+        
+        <div class="bottom row">
+            <div class="col-sm-4">
+                <input class="form-control" type="number" id="cp" value="<?php echo $row['cp'] ?>" />
+                <p>CP</p>
+            </div>
+            <div class="col-sm-4">
+                <input class="form-control" type="number" id="sp" value="<?php echo $row['sp'] ?>" />
+                <p>SP</p>
+            </div>
+            <div class="col-sm-4">
+                <input class="form-control" type="number" id="gp" value="<?php echo $row['gp'] ?>" />
+                <p>GP</p>
+            </div>
+        </div>
+        
+        
     </div>
-    <br/>
-    <table>
-        <tr>
-            <td class="main">
+    <div class="col-sm-1"></div>
+</div>
 
-            <div class="life">
-                <h3>Life</h3>
-                        <div>
-                            <h4>HIT POINTS</h4>
-                            <input type="text" id="hit_point" value="<?php echo $row['hit_point'] ?>" onblur="edit_input_info(<?php echo "'" . $row['id'] . "', 'hit_point'" ?>);" />
-                        </div>
-                        <div>
-                            <h4>ARMOR</h4>
-                            <input type="text" id="armor" value="<?php echo $row['armor'] ?>" onblur="edit_input_info(<?php echo "'" . $row['id'] . "', 'armor'" ?>);" />
-                        </div>
-                        <div>
-                            <h4>MAX HIT POINTS</h4>
-                            <input type="text" id="max_hit_point" value="<?php echo $row['max_hit_point'] ?>" onblur="edit_input_info(<?php echo "'" . $row['id'] . "', 'max_hit_point'" ?>);" />
-                        </div>
-                        <div>
-                            <h4>HIT DICE</h4>
-                            <input type="text" id="hit_dice" value="<?php echo $row['hit_dice'] ?>" onblur="edit_input_info(<?php echo "'" . $row['id'] . "', 'hit_dice'" ?>);" />
-                        </div>
-                        <br />
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <ul class="nav navbar-nav">
+            <li onclick="vis('main_info', 'show'); vis('background', 'hide');"><a>Home</a></li>
+            <li onclick="vis('main_info', 'hide'); vis('background', 'show');"><a>Background Information</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="container" id="main_info">
+    <div class=" col-xs-12 col-sm-5" >
+        
+        <div class="display row life ">
+            <div class="top ">
+                <div class="info_div col-xs-4 col-sm-4" >
+                    <h4><?php echo $sheet[$row['level']]['armor'] ?></h4>
+                    <p>Armor class</p>
+                </div>
+                <div class="info_div col-xs-4 col-sm-4" >
+                    <h4>+<?php echo $sheet[$row['level']]['proficiency'] ?></h4>
+                    <p>Proficiency</p>
+                </div>
+                <div class="info_div col-xs-4 col-sm-4" >
+                    <h4><?php echo $sheet[0]['speed'] ?></h4>
+                    <p>Speed</p>
+                </div>
             </div>
             
-            
-            <div class="attacks">
-                <h4>ATTACKS</h4>
-                <?php
-                
-                echo other_tables('attack', $row['id']);
-                
-                ?>
+            <div class="dice ">
+                <div class="info_div col-xs-4 col-sm-4">
+                    <h4><?php echo $sheet[$row['level']]['hit_point'] ?></h4>
+                    <p>Max hit points</p>
+                </div>
+                <div class="info_div col-xs-4 col-sm-4">
+                    <input class="form-control" type="number" id="hit_point" value="<?php echo $row['hit_point'] ?>" />
+                    <p>Hit points</p>
+                </div>
+                <div class="info_div col-xs-4 col-sm-4">
+                    <input class="form-control" type="number" id="take_hit_point" placeholder="take" />
+                    <p>Take off hit pints</p>
+                </div>
             </div>
-            
-            <div class="attacks">
-                <h4>EQUIPMENT</h4>
-                <?php
+        </div>
+        
+        <div class="row">
+            <?php
                 
                 echo other_tables('equipment', $row['id']);
                 
-                ?>
+            ?>
+        </div>
+        
+    </div>
+    
+    <div class="col-sm-2"></div>
+    
+    <div class=" col-xs-12 col-sm-5">
+        
+        <div class="display row  abilty">
+            <div class="top ">
+                <div class="info_div col-xs-4 col-sm-4">
+                    <p>Strength</p>
+                    <h4><?php echo $sheet[$row['level']]['abilties']['str'] ?></h4>
+                    <p><?php echo ability_mod($sheet[$row['level']]['abilties']['str'], $row['level']) ?></p>
+                </div>
+                <div class="info_div col-xs-4 col-sm-4">
+                    <p>Dexterity</p>
+                    <h4><?php echo $sheet[$row['level']]['abilties']['dex'] ?></h4>
+                    <p><?php echo ability_mod($sheet[$row['level']]['abilties']['dex'], $row['level']) ?></p>
+                </div>
+                <div class="info_div col-xs-4 col-sm-4">
+                    <p>Constitution</p>
+                    <h4><?php echo $sheet[$row['level']]['abilties']['con'] ?></h4>
+                    <p><?php echo ability_mod($sheet[$row['level']]['abilties']['con'], $row['level']) ?></p>
+                </div>
             </div>
-
-            </td>
-            
-            <td class="main">
-            
-            <div class="abill">
-                        <div>
-                            <h4>STRENGTH</h4>
-                            <p><?php echo $row['strenght'] ?></p>
-                            <p class="lower_num">+<?php echo  ability_mod($row['strenght'], $row['level']) ?></p>
-                        </div>
-                        <div>
-                            <h4>DEXTERITY</h4>
-                            <p><?php echo $row['dexterity'] ?></p>
-                            <p class="lower_num">+<?php echo ability_mod($row['dexterity'], $row['level']) ?></p>
-                        </div>
-                        <div>
-                            <h4>CONSTITUTION</h4>
-                            <p><?php echo $row['constitation'] ?></p>
-                            <p class="lower_num">+<?php echo ability_mod($row['constitation'], $row['level']) ?></p>
-                        </div>
-                        <div>
-                            <h4>INTELLIGENCE</h4>
-                            <p><?php echo $row['intelligence'] ?></p>
-                            <p class="lower_num">+<?php echo ability_mod($row['intelligence'], $row['level']) ?></p>
-                        </div>
-                        <div>
-                            <h4>WISDOM</h4>
-                            <p><?php echo $row['wisdom'] ?></p>
-                            <p class="lower_num">+<?php echo ability_mod($row['wisdom'], $row['level']) ?></p>
-                        </div>
-                        <div>
-                            <h4>CHARISMA</h4>
-                            <p><?php echo $row['charisma'] ?></p>
-                            <p class="lower_num">+<?php echo ability_mod($row['charisma'], $row['level']) ?></p>
-                        </div>
+            <div class="bottom ">
+                <div class="info_div col-xs-4 col-sm-4">
+                    <p>Intelligence</p>
+                    <h4><?php echo $sheet[$row['level']]['abilties']['int'] ?></h4>
+                    <p><?php echo ability_mod($sheet[$row['level']]['abilties']['int'], $row['level']) ?></p>
+                </div>
+                <div class="info_div col-xs-4 col-sm-4">
+                    <p>Wisdom</p>
+                    <h4><?php echo $sheet[$row['level']]['abilties']['wis'] ?></h4>
+                    <p><?php echo ability_mod($sheet[$row['level']]['abilties']['wis'], $row['level']) ?></p>
+                </div>
+                <div class="info_div col-xs-4 col-sm-4">
+                    <p>Charisma</p>
+                    <h4><?php echo $sheet[$row['level']]['abilties']['cha'] ?></h4>
+                    <p><?php echo ability_mod($sheet[$row['level']]['abilties']['cha'], $row['level']) ?></p>
+                </div>
             </div>
+        </div>
+        
+        <div class="skills display row">
+            <?php
+                $skills = array (
+                  array('Acrobatics', 'dex'),
+                  array('Animal Handling', 'wis'),
+                  array('Arcana', 'int'),
+                  array('Athletics', 'str'),
+                  array('Deception', 'cha'),
+                  array('History', 'int'),
+                  array('insight', 'wis'),
+                  array('intimidation', 'cha'),
+                  array('investigation', 'int'),
+                  array('Medicine', 'wis'),
+                  array('nature', 'int'),
+                  array('perception', 'wis'),
+                  array('performance', 'cha'),
+                  array('persuasion', 'cha'),
+                  array('Religion', 'int'),
+                  array('Sleight of hand', 'dex'),
+                  array('Stealth', 'dex'),
+                  array('Survival', 'wis')
+                );
+                function skill_mod($start, $level) {
+                    $skills = $GLOBALS['skills'];
+                    $sheet = $GLOBALS['sheet'];
+                    $result = "";
+                    for ($x = $start; $x < $start + 9; $x++) {
+                        $name = $skills[$x][0];
+                        $mod = ability_mod($sheet[$level]['abilties'][$skills[$x][1]], $level);
+                        $result .= "<li>$mod $name</li>";
+                    }
+                    return $result;
+                }
             
-            
-            
-            <div class="skills">
-                <h4>SKILLS</h4>
+            ?>
+            <div class=" left col-xs-6 col-sm-6">
                 <ul>
-                    <li> +<?php echo ability_mod($row['dexterity'], $row['level']) ?>  Acrobatics (Dex)</li>
-                    <li> +<?php echo ability_mod($row['wisdom'], $row['level']) ?>  Animal Handling (Wis)</li>
-                    <li> +<?php echo ability_mod($row['intelligence'], $row['level']) ?>  Arcana (Int)</li>
-                    <li> +<?php echo  ability_mod($row['strenght'], $row['level']) ?>  Athletics (Str)</li>
-                    <li> +<?php echo ability_mod($row['charisma'], $row['level']) ?>  Deception (Cha)</li>
-                    <li> +<?php echo ability_mod($row['intelligence'], $row['level']) ?>  History (Int)</li>
-                    <li> +<?php echo ability_mod($row['wisdom'], $row['level']) ?>  Insight (Wis)</li>
-                    <li> +<?php echo ability_mod($row['charisma'], $row['level']) ?>  Intimidation (Cha)</li>
-                    <li> +<?php echo ability_mod($row['intelligence'], $row['level']) ?>  Investigation (Int)</li>
-                    <li> +<?php echo ability_mod($row['wisdom'], $row['level']) ?>  Medicine (Wis)</li>
-                    <li> +<?php echo ability_mod($row['intelligence'], $row['level']) ?>  Nature (Int)</li>
-                    <li> +<?php echo ability_mod($row['wisdom'], $row['level']) ?>  Perception (Wis)</li>
-                    <li> +<?php echo ability_mod($row['charisma'], $row['level']) ?>  Performance (Cha)</li>
-                    <li> +<?php echo ability_mod($row['charisma'], $row['level']) ?>  Persuasion (Cha)</li>
-                    <li> +<?php echo ability_mod($row['intelligence'], $row['level']) ?>  Religion (Int)</li>
-                    <li> +<?php echo ability_mod($row['dexterity'], $row['level']) ?>  Sleight of Hand (Dex)</li>
-                    <li> +<?php echo ability_mod($row['dexterity'], $row['level']) ?>  Stealth (Dex)</li>
-                    <li> +<?php echo ability_mod($row['wisdom'], $row['level']) ?>  Survival (Wis)</li>
+                    <?php
+                    
+                     echo skill_mod(0, $row['level']);   
+                    
+                    ?>
                 </ul>
-                
             </div>
-            </td>
-        </tr>
-    </table>
- </section>
- <?php }  ?>
+            
+            <div class=" right col-xs-6 col-sm-6">
+                <ul>
+                <?php
+                    
+                     echo skill_mod(9, $row['level']);   
+                    
+                    ?>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="row">
+            <?php
+                
+                echo other_tables('attack', $row['id']);
+                
+            ?>
+        </div>
+        
+    </div>
+</div>
 
-</body>
-</html>
+
+
+
+<div class="container" id="background">
+    <div class="col-xs-12 col-sm-5">
+        
+    </div>
+    
+    <div class="col-sm-2"></div>
+    
+    <div class="col-xs-12 col-sm-5">
+        
+    </div>
+</div>
+
+
+
+
+<?php } ?>

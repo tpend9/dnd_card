@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 $servername = "localhost";
 $username = "root";
 $password = "";
@@ -29,84 +29,73 @@ function val ($input) {
     return $input;
 }
 
-function ability_mod($num, $level) {
-    $level = $level/2;
-    if($num <= 11) {
-        $num = 0;
-    } elseif( $num <= 13) {
-        $num = 1;
-    } elseif ($num <= 15) {
-        $num = 2;
-    } elseif ($num <= 17) {
-        $num = 3;
-    } elseif ($num <= 19) {
-        $num = 4;
-    } elseif ($num <= 21) {
-        $num = 5;
-    } elseif ($num <=23) {
-        $num = 6;
-    } elseif ($num <= 25) {
-        $num = 7;
-    } elseif ($num <= 27) {
-        $num = 8;
-    } elseif ($num <= 29) {
-        $num = 9;
-    } elseif ($num <= 31) {
-        $num = 10;
-    } elseif ($num <= 33) {
-        $num = 11;
-    } elseif ($num <= 35) {
-        $num = 12;
-    } elseif ($num <= 37) {
-        $num = 13;
-    } elseif ($num <= 39) {
-        $num = 14;
-    } else {
-        $num = 15;
-    }
-    
-    return floor($level * $num);
-}
 
 
-
+include("character_sheet/1.php");
 
 $player_name = val($_POST['player_name']);
 $email = val($_POST['user_email']);
 $username = val($_POST['user_username']);
-$password = val($_POST['user_password']);
+$password = password_hash(val($_POST['user_password']), PASSWORD_DEFAULT);
+
+$sp = $sheet[0]['sp'];
+$gp = $sheet[0]['gp'];
+
+$hit_point = $sheet[1]['hit_point'];
 
 
-$class = array('Barbarian', 'Bard', 'Druid', 'Monk', 'Paladin', 'Ranger', 'Sorcerer', 'Warlock');
-$class = $class[rand(0, count($class))];
-$backgound = array('Acolyte', 'Charlatan', 'Criminal', 'Entertainer', 'Folk Hero', 'Guild Artisan', 'Hermit', 'Noble', 'Outlander', 'Sage', 'Sailor', 'Soldier', 'Urchin', 'Urchin', 'Haunted One');
-$backgound = $backgound[rand(0, count($backgound))];
-$race = array('Dragonborn', 'Dwarf', 'Eladrin', 'Elf', 'Gnome', 'Half-elf', 'Half-orc', 'Halfling', 'Human', 'Tiefling');
-$race = $race[rand(0, count($race))];
+$sql = "INSERT INTO user(name, cp, sp, gp, hit_point, id, level, user_name, password, email)
+VALUES ('$player_name','','$sp','$gp','$hit_point','','1','$username','$password','$email')";
 
-
-function ran($dice, $num) {
-    $result = 0;
-    for ($x = 0; $x <= $num; $x++) {
-        $result += rand(1, $dice);
-    }
-    return $result;
+if (mysqli_query($conn, $sql)) {
+    echo "New record created successfully";
+} else {
+    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
 }
 
+$sql = "SELECT id FROM user WHERE user_name = '$username'";
+$result = mysqli_query($conn, $sql);
+    // output data of each row
+    while($row = mysqli_fetch_assoc($result)) {
+        $id = $row['id'];
+    }
 
-$strength = ran(6, 3);
-$constitation = ran(6, 3);
-$wisdom = ran(6, 3);
-$dextrity = ran(6, 3);
-$intelligence = ran(6, 3);
-$charisma = ran(6, 3);
 
-$hit_point = ability_mod($constitation, 1) + 8;
-$hit_dice = array(4, 6, 8, 10);
-$hit_dice = $hit_dice[rand(0, count($hit_dice))];
 
-$gp = ran(6, 5);
 
+
+//adding equipment
+$sql = "";
+foreach ($sheet[0]['equipment'] as $value) {
+    $name = $value[0];
+    $quantity = $value[1];
+    $sql = "INSERT INTO `equipment`(`name`, `quantity`, `id`, `user_id`) VALUES
+    ('$name','$quantity','','$id')";
+    
+    if (mysqli_query($conn, $sql)) {
+        echo "New record created successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+    }
+}
+
+$sql = "";
+foreach ($sheet[1]['actions'] as $value) {
+    $name = $value['name'];
+    $atk_bonus = $value['atk_bonus'];
+    $damage = $value['damage'];
+    $sql = "INSERT INTO `attack`(`name`, `atk_bonus`, `damage`, `id`, `user_id`) VALUES
+    ('$name','$atk_bonus','$damage','','$id')";
+    
+    if (mysqli_query($conn, $sql)) {
+        echo "New record created successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+    }
+}
+
+$_SESSION['id'] = $id;
+header("Location: dash.php");
 
 
 

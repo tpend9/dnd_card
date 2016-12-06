@@ -1,0 +1,28 @@
+.display {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background: lightgrey;
+}
+.display .info_div {
+    height: 91px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border: 1px solid black;
+}
+
+
+
+.skills li {
+    list-style: none;
+}
+.skills ul {
+    padding: 0;
+    text-align: left;
+    
+}
+.skills {
+    border: 1px solid black;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
