@@ -11,6 +11,17 @@
     border: 1px solid black;
 }
 
+.background-display {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background: lightgrey;
+    padding: 10px;
+}
+.background-display ul {
+    list-style: none;
+    padding: 0;
+}
+
 
 
 .skills li {

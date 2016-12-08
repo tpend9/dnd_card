@@ -173,14 +173,13 @@ $result = mysqli_query($conn, $sql);
 </div>
 
 
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <ul class="nav navbar-nav">
-            <li onclick="vis('main_info', 'show'); vis('background', 'hide');"><a>Home</a></li>
-            <li onclick="vis('main_info', 'hide'); vis('background', 'show');"><a>Background Information</a></li>
+
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li id="main_info_tab" class="active" onclick="select('main_info_tab'); vis('main_info', 'show'); vis('background', 'hide');"><a>Home</a></li>
+            <li id="background_tab" class="" onclick="select('background_tab'); vis('main_info', 'hide'); vis('background', 'show');"><a>Background Information</a></li>
         </ul>
     </div>
-</nav>
 
 
 
@@ -354,12 +353,41 @@ $result = mysqli_query($conn, $sql);
 <div class="container" id="background">
     <div class="col-xs-12 col-sm-5">
         
+        <div class="row background-display">
+            <h4>Background stroy</h4>
+            <p><?php echo $sheet[0]['story'] ?></p>
+        </div>
+        
+        <div class="row proficiencies background-display">
+            <ul>
+                <li>Languages:
+                <?php
+                    foreach ($sheet[0]['languages'] as $value ) {
+                        echo " " . $value . ", ";
+                    }
+                ?>
+                </li>
+                <li>Armor: <?php echo $sheet[0]['armor'] ?></li>
+                <li>Weapons: <?php echo $sheet[0]['weapons'] ?></li>
+                <li>Senses: <?php echo $sheet[0]['senses'] ?></li>
+            </ul>
+        </div>
     </div>
     
     <div class="col-sm-2"></div>
     
     <div class="col-xs-12 col-sm-5">
-        
+        <div class="row background-display">
+            <?php
+            $traits = array('personality_trait', 'ideal', 'bond', 'flaw');
+            for ($x = 0; $x < count($traits); $x++) {
+                ?>
+            <div class="col-xs-12">
+                <h4><?php echo $traits[$x] ?></h4>
+                <p><?php echo $sheet[0][$traits[$x]] ?></p>
+            </div>
+            <?php } ?>
+        </div>
     </div>
 </div>
 
