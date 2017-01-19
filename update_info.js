@@ -11,6 +11,14 @@ function update_info(table, id, user_id) {
     
     var xmlhttp = new XMLHttpRequest();
     
+    xmlhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById('alert').className = "";
+                document.getElementById("update_alert").innerHTML = this.responseText;
+                document.getElementById('alert').style.display = 'block';
+            }
+        };
+    
     xmlhttp.open("GET", "edit_info.php?table=" + table + "&id=" + id + "&user_id=" + user_id + "&str=" + str, true);
     xmlhttp.send();
     

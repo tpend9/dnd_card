@@ -164,9 +164,15 @@ $result = mysqli_query($conn, $sql);
         
     </div>
     <div class="col-sm-1"></div>
+    
+    
+    
 </div>
 
-
+    <div class="alert alert-success container" id="alert">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <span id="update_alert"></span>
+    </div>
 
     <div class="container">
         <ul class="nav nav-tabs">
