@@ -13,9 +13,7 @@ function update_info(table, id, user_id) {
     
     xmlhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
-                document.getElementById('alert').className = "";
-                document.getElementById("update_alert").innerHTML = this.responseText;
-                document.getElementById('alert').style.display = 'block';
+                document.getElementById("alert_display").innerHTML = this.responseText;
             }
         };
     

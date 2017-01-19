@@ -46,9 +46,11 @@ switch ($title) {
                 <li <?php echo $nav[1] ?>>
                     <a href="#">How It Works</a>
                 </li >
-                <li <?php echo $nav[2] ?>>
-                    <a href="dash.php">Dashborad</a>
-                </li>
+                <?php if (isset($_SESSION['id'])) { ?>
+                    <li <?php echo $nav[2] ?>>
+                        <a href="dash.php">Dashborad</a>
+                    </li>
+                <?php } ?>
             </ul>
         </div>
     </nav>

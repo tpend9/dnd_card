@@ -169,8 +169,8 @@ $result = mysqli_query($conn, $sql);
     
 </div>
 
-    <div class="alert alert-success container" id="alert">
-        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <div class="container" id="alert" >
+        
         <span id="update_alert"></span>
     </div>
 
