@@ -14,3 +14,7 @@ form {
 .login {
     margin-left: 10px;
 }
+
+#background {
+    display: none;
+}

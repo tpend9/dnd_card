@@ -77,21 +77,25 @@ function other_tables($table, $id) {
             $result .= "<th>" . $info[$x] . "</th>";
         }
     $result .= "
-        <th>Edit</th>
+        <th>Remove</th>
         </tr>";
     
     $sql = "SELECT * FROM $table WHERE user_id = $id";
     $query = mysqli_query($conn, $sql);
     
     while ($row = mysqli_fetch_assoc($query)) {
-        $result .= "<tr>";
+        $result .= "<tr id='" . $table . "_" . $row['id'] . "'>";
                 
                 for ($x = 0; $x < count($info); $x++) {
-                    $result .= "<td>" . $row[strtolower($info[$x])] . "</td>";
+                    if ($info[$x] == "Quantity") {
+                        $result .= "<td> <input class='form-control' type='number' id='quantity_" . $row['id'] . "' value='" . $row[strtolower($info[$x])] . "' onblur=\"update_equipment('" . $row['id'] . "', '" . $row['user_id'] . "')\" > </td>";
+                    } else {
+                        $result .= "<td>" . $row[strtolower($info[$x])] . "</td>";
+                    }
                 }
                 
             $result .= "
-                <td onclick='show_edit();' >Edit</td>
+                <td onclick=\"remove_info('" . $table . "', '" . $row['id'] . "');\" >Remove</td>
             </tr>";
     }
     $result .= "</table>";
@@ -109,17 +113,7 @@ function other_tables($table, $id) {
 
 
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "dnd";
-
-// Create connection
-$conn = mysqli_connect($servername, $username, $password, $dbname);
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-}
+include("extra/database_info.php");
 
 $sql = "SELECT * FROM `user` WHERE id = '" . $_SESSION['id'] ."'";
 $result = mysqli_query($conn, $sql);
@@ -142,27 +136,27 @@ $result = mysqli_query($conn, $sql);
             </div>
             <div class="col-sm-3">
                 <h2></h2>
-                <input class="form-control" type="number" id="xp" value="<?php echo $row['xp'] ?>" />
+                <input class="form-control" type="number" id="xp" value="<?php echo $row['xp'] ?>" onblur="update_info(<?php echo "'user', 'xp', '" . $row['id'] . "'" ?>);" />
                 <p>XP</p>
             </div>
             <div class="col-sm-3">
                 <h2></h2>
-                <input class="form-control" type="number" id="level" value="<?php echo $row['level'] ?>" />
+                <input class="form-control" type="number" id="level" value="<?php echo $row['level'] ?>" onblur="update_info(<?php echo "'user', 'level', '" . $row['id'] . "'" ?>);" />
                 <p>Level</p>
             </div>
         </div>
         
         <div class="bottom row">
             <div class="col-sm-4">
-                <input class="form-control" type="number" id="cp" value="<?php echo $row['cp'] ?>" />
+                <input class="form-control" type="number" id="cp" value="<?php echo $row['cp'] ?>" onblur="update_info(<?php echo "'user', 'cp', '" . $row['id'] . "'" ?>);" />
                 <p>CP</p>
             </div>
             <div class="col-sm-4">
-                <input class="form-control" type="number" id="sp" value="<?php echo $row['sp'] ?>" />
+                <input class="form-control" type="number" id="sp" value="<?php echo $row['sp'] ?>" onblur="update_info(<?php echo "'user', 'sp', '" . $row['id'] . "'" ?>);" />
                 <p>SP</p>
             </div>
             <div class="col-sm-4">
-                <input class="form-control" type="number" id="gp" value="<?php echo $row['gp'] ?>" />
+                <input class="form-control" type="number" id="gp" value="<?php echo $row['gp'] ?>" onblur="update_info(<?php echo "'user', 'gp', '" . $row['id'] . "'" ?>);" />
                 <p>GP</p>
             </div>
         </div>
@@ -219,11 +213,11 @@ $result = mysqli_query($conn, $sql);
                     <p>Max hit points</p>
                 </div>
                 <div class="info_div col-xs-4 col-sm-4">
-                    <input class="form-control" type="number" id="hit_point" value="<?php echo $row['hit_point'] ?>" />
+                    <input class="form-control" type="number" id="hit_point" value="<?php echo $row['hit_point'] ?>" onblur="update_info(<?php echo "'user', 'hit_point', '" . $row['id'] . "'" ?>);" />
                     <p>Hit points</p>
                 </div>
                 <div class="info_div col-xs-4 col-sm-4">
-                    <input class="form-control" type="number" id="take_hit_point" placeholder="take" />
+                    <input class="form-control" type="number" id="take_hit_point" placeholder="take" onblur="take_life(<?php echo "" . $row['id'] . "" ?>);" />
                     <p>Take off hit pints</p>
                 </div>
             </div>
@@ -390,6 +384,8 @@ $result = mysqli_query($conn, $sql);
         </div>
     </div>
 </div>
+
+<script src="update_info.js"></script>
 
 
 
